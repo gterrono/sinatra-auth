@@ -4,6 +4,7 @@ class DmUser
   property :id, Serial
   property :email, String, :length => (5..40), :unique => true, :format => :email_address
   property :hashed_password, String
+  property :cookie, String
   property :salt, String
   #Was DateTime should be DateTime?
   property :created_at, Time
@@ -33,6 +34,20 @@ class DmUser
 
   def site_admin?
     self.id == 1
+  end
+
+  def json_hash
+    {
+      :cookie =>  self.cookie,
+      :created_at => self.created_at,
+      :permission_level => self.permission_level,
+      :id => self.id,
+      :email => self.email
+    }
+  end
+
+  def to_json
+    self.json_hash.to_json
   end
 
   protected
